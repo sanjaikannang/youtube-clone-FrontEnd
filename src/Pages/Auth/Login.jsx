@@ -6,15 +6,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const Navigate = useNavigate();
-
-  const handlelogin = () => {
-    Navigate("/login");
-  };
-
-  const handlesignup = () => {
-    Navigate("/signup");
-  };
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     setLoading(true);
@@ -42,7 +34,7 @@ const Login = () => {
 
         if (data.result && data.result._id) {
           localStorage.setItem("userId", data.result._id);
-          Navigate("/homepage");
+          navigate("/homepage");
         } else {
           setErr("User information is missing or invalid!");
         }
@@ -65,14 +57,14 @@ const Login = () => {
         </div>
         <div className="flex items-center space-x-4">
           <button
-            onClick={handlelogin}
             className="text-white bg-red-500 font-medium px-4 py-2 rounded-md"
+            onClick={() => navigate("/login")}
           >
             Login
           </button>
           <button
-            onClick={handlesignup}
             className="text-red-500 border border-red-500 bg-white font-medium px-4 py-2 rounded-md"
+            onClick={() => navigate("/signup")}
           >
             Signup
           </button>
@@ -110,8 +102,12 @@ const Login = () => {
               onClick={handleLogin}
               disabled={loading}
             >
-              {loading && <img alt="" />}
-              {!loading ? "Login" : "Logging In..."}
+              {loading && (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-7 w-7 border-t-2 border-b-2 border-white mr-2"></div>
+                </div>
+              )}
+              {!loading ? "Login" : ""}
             </button>
             {err && (
               <p color="error" sx={{ mt: 2 }}>
@@ -120,9 +116,12 @@ const Login = () => {
             )}
             <p className="text-gray-600 mt-2">
               Don't have an account?
-              <a onClick={handlesignup} className="text-red-500">
+              <button
+                onClick={() => navigate("/signup")}
+                className="text-red-500"
+              >
                 Signup here.
-              </a>
+              </button>
             </p>
           </div>
         </div>
